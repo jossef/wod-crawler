@@ -19,7 +19,7 @@ jobs:
 
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.13'
+          python-version: '3.14'
 
       - name: Install Python dependencies
         run: |
@@ -29,6 +29,8 @@ jobs:
       - name: Run Sync
         run: |
           python3 main.py
+        env:
+          TELEGRAM_BOT_TOKEN: "${{secrets.TELEGRAM_BOT_TOKEN}}"
 
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:

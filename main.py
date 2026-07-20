@@ -4,11 +4,18 @@ import json
 import requests
 from bs4 import BeautifulSoup
 import os
+import dotenv
+
+import common
+
+dotenv.load_dotenv()
 
 MAX_PAGE = 300
 BASE_URL = "https://wods.crossfitpanda.com"
 SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 
+TELEGRAM_BOT_TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
+CHAT_ID = "-1003496986585" # prod
 
 def get_latest_user_agent(operating_system='windows', browser='chrome'):
     url = f'https://jnrbsn.github.io/user-agents/user-agents.json'
@@ -92,6 +99,13 @@ class WODCrawler:
                 print(f'saving WOD: {workout["url"]}')
                 with open(file_path, 'w+', encoding='utf-8') as f:
                     json.dump(workout, f, ensure_ascii=False, indent=4)
+
+                print(f'sending via telegram')
+                common.send_telegram_workout(
+                    token=TELEGRAM_BOT_TOKEN,
+                    chat_id=CHAT_ID,
+                    workout=workout,
+                )
 
 
 def main():
